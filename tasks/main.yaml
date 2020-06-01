@@ -1,0 +1,19 @@
+---
+- name: "Update templates"
+  template:
+    src:  "{{ item.src | default((item.dest | basename ()) + '.j2')}}"
+    dest: "{{ item.dest }}"
+  with_items: "{{ configure_chrony.templates[(ansible_os_family | lower) + '_' + (ansible_architecture | lower)] | default([]) }}"
+  notify: "chrony-restart"
+  tags:
+    - "chrony"
+
+- name: "Start and Enable Service"
+  service:
+    name:          "{{ item.name }}"
+    enabled:       "yes"
+    state:         "started"
+    daemon_reload: "yes"
+  with_items: "{{ configure_chrony.services[(ansible_os_family | lower) + '_' + (ansible_architecture | lower)] | default([]) }}"
+  tags:
+    - chrony

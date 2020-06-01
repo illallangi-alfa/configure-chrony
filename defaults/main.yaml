@@ -1,0 +1,12 @@
+---
+configure_chrony:
+  templates:
+    common: &templates
+      - dest:  "/etc/chrony.conf"
+    debian_armv7l: *templates
+    debian_x86_64: *templates
+  services:
+    common: &services
+      - name: "chrony"
+    debian_armv7l: *services
+    debian_x86_64: *services

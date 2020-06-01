@@ -1,0 +1,8 @@
+---
+- name: "Restart chrony"
+  systemd:
+    daemon_reload: "yes"
+    name:          "{{ item.name }}"
+    state:         "restarted"
+  with_items: "{{ configure_chrony.services[(ansible_os_family | lower) + '_' + (ansible_architecture | lower)] | default([]) }}"
+  listen: "chrony-restart"
